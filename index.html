@@ -9,8 +9,39 @@
 </head>
 
 <body>
+    <header>
 
-    <h1>Hello!</h1>
+    </header>
+
+    <div>
+
+        <h1>Welcome to the library</h1>
+    </div>
+
+    <div class="main_section">
+        <label for="new_book">Add a book:</label>
+        <button type="button" name="new_book" id="new_book">New book</button>
+    </div>
+    <fieldset>
+        <legend>Add your new book:</legend>
+        <form action="" method="POST">
+            <label for="name">Book name:</label>
+            <input type="text" name="name" id="name">
+            <label for="author">Author:</label>
+            <input type="text" name="author" id="author">
+            <label for="year">Year:</label>
+            <input type="date" name="year" id="year">
+
+            <div class="submit">
+
+                <button type="submit" name="submit" id="submit">Submit</button>
+
+                <button type="reset" name="reset" id="reset">Reset</button>
+
+            </div>
+        </form>
+    </fieldset>
+
 
     <script src="./script.js"></script>
 </body>
