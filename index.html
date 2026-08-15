@@ -18,29 +18,38 @@
         <h1>Welcome to the library</h1>
     </div>
 
-    <div class="main_section">
+    <div class="add_section">
         <label for="new_book">Add a book:</label>
-        <button type="button" name="new_book" id="new_book">New book</button>
+        <button type="button" popovertarget="book_dialog" name="new_book" id="new_book">New
+            book</button>
+        <dialog id="book_dialog" popover>
+            <legend>Add your new book:</legend>
+            <form action="" method="POST">
+                <label for="name">Book name:</label>
+                <input type="text" name="name" id="name">
+                <label for="author">Author:</label>
+                <input type="text" name="author" id="author">
+                <label for="year">Year:</label>
+                <input type="date" name="year" id="year">
+
+                <div class="submit">
+
+                    <button type="submit" name="submit" id="submit">Submit</button>
+
+                    <button type="reset" name="reset" id="reset">Reset</button>
+
+                </div>
+            </form>
+        </dialog>
     </div>
-    <fieldset>
-        <legend>Add your new book:</legend>
-        <form action="" method="POST">
-            <label for="name">Book name:</label>
-            <input type="text" name="name" id="name">
-            <label for="author">Author:</label>
-            <input type="text" name="author" id="author">
-            <label for="year">Year:</label>
-            <input type="date" name="year" id="year">
 
-            <div class="submit">
+    <div class="book_section">
+        <div class="card">
 
-                <button type="submit" name="submit" id="submit">Submit</button>
+        </div>
 
-                <button type="reset" name="reset" id="reset">Reset</button>
+    </div>
 
-            </div>
-        </form>
-    </fieldset>
 
 
     <script src="./script.js"></script>
