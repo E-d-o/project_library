@@ -57,6 +57,27 @@ function Library() {
     this.getLastBook = function () {
         return this.books[this.books.length - 1]
     }
+    this.deleteBook = function (bookId) {
+        const removeIdx = this.books.findIndex(book => {
+            console.log(`book ha id: ${book.getId()}`)
+            console.log(`target ha id:${bookId}`)
+            return book.getId() === bookId
+        })
+        if (removeIdx !== -1) {
+
+            this.books.splice(removeIdx, 1)
+            this.printLibrary();
+            console.log("Done delete")
+            return true
+
+        }
+        else {
+            console.log("NON trovato")
+            return SyntaxError("bookId is not valid")
+        }
+    }
+
+
 
 }
 
@@ -84,7 +105,7 @@ library.printLibrary();
 
 
 
-function BookCard() {
+function BookCard(book, onDelete) {
     if (!new.target) {
         throw new TypeError("Calling BookCard without new is not permitted")
     }
@@ -98,6 +119,13 @@ function BookCard() {
     // this.idElement=
     this.readElement = document.createElement("input")
     this.readElement.setAttribute("type", "checkbox")
+    this.deleteElement = document.createElement("button")
+    this.deleteElement.textContent = "Delete"
+    this.deleteElement.addEventListener("click", (event) => {
+        const bookId = book.getId()
+        onDelete(bookId, this.book_card_container)
+    })
+
 
     this.authorElement.classList.add("book-author")
     this.dateElement.classList.add("book-date")
@@ -106,12 +134,10 @@ function BookCard() {
     this.book_card_container.appendChild(this.authorElement)
     this.book_card_container.appendChild(this.dateElement)
     this.book_card_container.appendChild(this.readElement)
+    this.book_card_container.appendChild(this.deleteElement)
 
-    this.id; //used to link the library object to the presentation object (this)
-    this.setId = function (id) {
-        this.id = id;
-        return this;
-    }
+
+
     this.setTitle = function (title) {
         this.titleElement.textContent = title
         return this
@@ -129,6 +155,12 @@ function BookCard() {
         return this
     }
     this.render = function () {
+        book_qualities = book.getQualities()
+        this
+            .setTitle(book_qualities["name"])
+            .setReadStatus(book_qualities["isRead"])
+            .setAuthor(book_qualities["author"])
+            .setDate(book_qualities["year"])
         return this.book_card_container;
     }
 }
@@ -146,16 +178,17 @@ function displayBooks(last_only = true) {
     container = document.querySelector(".book_section")
 
 
-    book_arr.slice().reverse().forEach(book => { //reverse order
-        book_card = new BookCard()
-        book_qualities = book.getQualities()
-        book_card
-            .setId(book_qualities['id'])
-            .setTitle(book_qualities["name"])
-            .setReadStatus(book_qualities["isRead"])
-            .setAuthor(book_qualities["author"])
-            .setDate(book_qualities["year"])
-        container.appendChild(book_card.render())
+    book_arr.forEach(book => {
+        book_card = new BookCard(book, function (bookId, book_card_container) { //callback function, in order to not have dependency on library
+            if (library.deleteBook(bookId)) {
+
+                book_card_container.remove()
+            } else {
+            }
+        }
+        )
+
+        container.prepend(book_card.render())//reverse order
 
 
     })
@@ -165,9 +198,9 @@ function onSubmit(event) {
     event.preventDefault();
     console.log("Sumbitted!");
 
-    field = document.querySelector("#book_dialog")
-    form = document.querySelector("form")
-    formData = new FormData(form)
+    let field = document.querySelector("#book_dialog")
+    let form = document.querySelector("form")
+    let formData = new FormData(form)
     createNewBook(new BookQualities(formData.get("name"), formData.get("author"), formData.get("year")))
     console.log(library.getLastBook().toString());
     displayBooks()
