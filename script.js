@@ -26,7 +26,10 @@ function Book(bookQualities) {
 
     this.toString = function () {
 
-        return this.bookQualities
+        return JSON.stringify(this.bookQualities)
+    }
+    this.getQualities = function () {
+        return this.bookQualities;
     }
 
 
@@ -40,7 +43,7 @@ function Library() {
     }
     this.books = []
 
-    this.add_book = function (book) {
+    this.addBook = function (book) {
         this.books.push(book)
     }
     this.printLibrary = function () {
@@ -48,8 +51,11 @@ function Library() {
             console.log(element.toString())
         });
     }
-    this.get_books = function () {
+    this.getBooks = function () {
         return this.books
+    }
+    this.getLastBook = function () {
+        return this.books[this.books.length - 1]
     }
 
 }
@@ -59,7 +65,7 @@ library = new Library();
 function createNewBook(bookQualities) {
     try {
         book = new Book(bookQualities)
-        library.add_book(book)
+        library.addBook(book)
         console.log("Added a new book!")
 
     } catch (error) {
@@ -75,17 +81,7 @@ console.log(library)
 library.printLibrary();
 
 
-function on_submit(event) {
-    event.preventDefault();
-    console.log("Sumbitted!");
 
-    field = document.querySelector("#book_dialog")
-    field.style.display = "none"
-    form = document.querySelector("form")
-    formData = new FormData(form)
-    createNewBook(new BookQualities(formData.get("name"), formData.get("author"), formData.get("year")))
-    library[library.length - 1].toString();
-}
 
 
 function BookCard() {
@@ -109,10 +105,13 @@ function BookCard() {
     this.book_card_container.appendChild(this.titleElement)
     this.book_card_container.appendChild(this.authorElement)
     this.book_card_container.appendChild(this.dateElement)
-
     this.book_card_container.appendChild(this.readElement)
 
-
+    this.id; //used to link the library object to the presentation object (this)
+    this.setId = function (id) {
+        this.id = id;
+        return this;
+    }
     this.setTitle = function (title) {
         this.titleElement.textContent = title
         return this
@@ -134,24 +133,49 @@ function BookCard() {
     }
 }
 
-function display_books() {
-    book_arr = library.get_books()
+function displayBooks(last_only = true) {
+    if (last_only) {
+        book_arr = [];
+        book_arr.push(library.getLastBook())
+        console.log(`in last only:${book_arr.toString()}`);
+    } else {
 
+        book_arr = library.getBooks()
+
+    }
     container = document.querySelector(".book_section")
 
 
-    book_arr.forEach(book => {
+    book_arr.slice().reverse().forEach(book => { //reverse order
         book_card = new BookCard()
-        book_qualities = book.toString()
+        book_qualities = book.getQualities()
         book_card
+            .setId(book_qualities['id'])
             .setTitle(book_qualities["name"])
             .setReadStatus(book_qualities["isRead"])
             .setAuthor(book_qualities["author"])
+            .setDate(book_qualities["year"])
         container.appendChild(book_card.render())
 
 
     })
 }
+
+function onSubmit(event) {
+    event.preventDefault();
+    console.log("Sumbitted!");
+
+    field = document.querySelector("#book_dialog")
+    form = document.querySelector("form")
+    formData = new FormData(form)
+    createNewBook(new BookQualities(formData.get("name"), formData.get("author"), formData.get("year")))
+    console.log(library.getLastBook().toString());
+    displayBooks()
+}
+
 form = document.querySelector("form")
-form.addEventListener("submit", on_submit)
-display_books();
+form.addEventListener("submit", onSubmit)
+
+
+
+displayBooks(last_only = false);
