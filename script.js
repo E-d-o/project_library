@@ -152,8 +152,8 @@ function BookCard(book) {
         <p class="book-date">${book.getDate()}</p>
         <div class="card-actions">
         <div class="read-actions">
-            <label for="read_status">Letto?</label>
-            <input id="read_status" name="read_status" type="checkbox" class="book-read" ${book.getReadStatus() ? 'checked' : ''}>
+            <label for="read_status${this.book.getId()}">Letto?</label>
+            <input id="read_status${this.book.getId()}" name="read_status" type="checkbox" class="book-read" ${book.getReadStatus() ? 'checked' : ''}>
         </div>
                 
             <button class="book-delete">Cancella</button>
@@ -186,11 +186,17 @@ function BookCard(book) {
     //     this.dateElement.textContent = date
     //     return this
     // }
+    const border_colors = { "true": "teal", "false": "#8B8473" }
+
 
     this.onRead = function () {
         const bookId = this.book.getId()
+
+
         if (library.changeReadStatus(bookId)) {
             console.log("Cambiando anche read of UI")
+            let border_color = this.getBorderColor();
+            this.book_card_container.style.setProperty("--border-col", `${border_color}`)
 
         } else {
             console.error("cannot change read status")
@@ -206,7 +212,16 @@ function BookCard(book) {
         }
     }
     this.render = function () {
+        let border_color = this.getBorderColor()
+        this.book_card_container.style.setProperty("--border-col", `${border_color}`)
         return this.book_card_container;
+    }
+
+    this.getBorderColor = function () {
+        let readStatus = this.book.getReadStatus();
+        let border_color = border_colors[readStatus.toString()];
+        console.log(border_color);
+        return border_color;
     }
 }
 
