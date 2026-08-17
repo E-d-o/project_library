@@ -57,17 +57,14 @@ function Library() {
     this.getLastBook = function () {
         return this.books[this.books.length - 1]
     }
+
     this.deleteBook = function (bookId) {
-        const removeIdx = this.books.findIndex(book => {
-            console.log(`book ha id: ${book.getId()}`)
-            console.log(`target ha id:${bookId}`)
-            return book.getId() === bookId
-        })
+        const removeIdx = this.getBookIndex(bookId)
         if (removeIdx !== -1) {
 
             this.books.splice(removeIdx, 1)
-            this.printLibrary();
             console.log("Done delete")
+            this.printLibrary();
             return true
 
         }
@@ -76,9 +73,31 @@ function Library() {
             return SyntaxError("bookId is not valid")
         }
     }
+    this.changeReadStatus = function (bookId) {
+        const changeIdx = this.getBookIndex(bookId)
+        if (changeIdx !== -1) {
+            console.log(`Da:${this.books[changeIdx].getQualities().isRead}`)
+            this.books[changeIdx].getQualities().isRead = !this.books[changeIdx].getQualities().isRead
+            console.log(`A:${this.books[changeIdx].getQualities().isRead}`)
+            console.log("cambiato read status")
+            return true
+
+
+        } else {
+            console.log("Non trovato")
+            return SyntaxError("bookId is not valid")
+        }
+    }
 
 
 
+
+    this.getBookIndex = function (bookId) {
+        return this.books.findIndex(book => {
+
+            return book.getId() === bookId;
+        });
+    }
 }
 
 library = new Library();
@@ -98,18 +117,17 @@ function createNewBook(bookQualities) {
 
 createNewBook(new BookQualities("Gennaro stirato"))
 createNewBook(new BookQualities("La principessa", "Toyo Taro"))
-console.log(library)
-library.printLibrary();
 
 
 
 
 
-function BookCard(book, onDelete) {
+
+function BookCard(book) {
     if (!new.target) {
         throw new TypeError("Calling BookCard without new is not permitted")
     }
-
+    this.book = book
     this.book_card_container = document.createElement("div")
     this.book_card_container.classList.add("card")
 
@@ -121,14 +139,17 @@ function BookCard(book, onDelete) {
     this.readElement.setAttribute("type", "checkbox")
     this.deleteElement = document.createElement("button")
     this.deleteElement.textContent = "Delete"
-    this.deleteElement.addEventListener("click", (event) => {
-        const bookId = book.getId()
-        onDelete(bookId, this.book_card_container)
+    this.deleteElement.addEventListener("click", (event) => this.onDelete())
+    this.readElement.addEventListener("change", (event) => {
+
+        this.onRead()
     })
 
-
+    //classes for style
     this.authorElement.classList.add("book-author")
     this.dateElement.classList.add("book-date")
+
+    //
 
     this.book_card_container.appendChild(this.titleElement)
     this.book_card_container.appendChild(this.authorElement)
@@ -154,6 +175,25 @@ function BookCard(book, onDelete) {
         this.dateElement.textContent = date
         return this
     }
+
+    this.onRead = function () {
+        const bookId = this.book.getId()
+        if (library.changeReadStatus(bookId)) {
+            console.log("Cambiando anche read of UI")
+
+        } else {
+            console.error("cannot change read status")
+            this.setReadStatus(!this.readElement.checked)
+        }
+    }
+    this.onDelete = function () {
+        const bookId = this.book.getId()
+        if (library.deleteBook(bookId)) {
+            this.book_card_container.remove()
+        } else {
+            console.error("cannot remove book")
+        }
+    }
     this.render = function () {
         book_qualities = book.getQualities()
         this
@@ -164,6 +204,9 @@ function BookCard(book, onDelete) {
         return this.book_card_container;
     }
 }
+
+
+
 
 function displayBooks(last_only = true) {
     if (last_only) {
@@ -179,19 +222,16 @@ function displayBooks(last_only = true) {
 
 
     book_arr.forEach(book => {
-        book_card = new BookCard(book, function (bookId, book_card_container) { //callback function, in order to not have dependency on library
-            if (library.deleteBook(bookId)) {
-
-                book_card_container.remove()
-            } else {
-            }
-        }
-        )
-
-        container.prepend(book_card.render())//reverse order
+        displayBook(book);//reverse order
 
 
     })
+}
+
+function displayBook(book) {
+    book_card = new BookCard(book);
+
+    container.prepend(book_card.render());
 }
 
 function onSubmit(event) {
