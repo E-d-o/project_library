@@ -23,6 +23,20 @@ function Book(bookQualities) {
     this.getId = function () {
         return this.bookQualities.id;
     }
+    this.getTitle = function () {
+        return this.bookQualities.name
+    }
+    this.getAuthor = function () {
+        return this.bookQualities.author
+    }
+
+    this.getDate = function () {
+        return this.bookQualities.year
+    }
+
+    this.getReadStatus = function () {
+        return this.bookQualities.isRead
+    }
 
     this.toString = function () {
 
@@ -131,50 +145,45 @@ function BookCard(book) {
     this.book_card_container = document.createElement("div")
     this.book_card_container.classList.add("card")
 
-    this.titleElement = document.createElement("h3")
-    this.authorElement = document.createElement("p")
-    this.dateElement = document.createElement("p");
-    // this.idElement=
-    this.readElement = document.createElement("input")
-    this.readElement.setAttribute("type", "checkbox")
-    this.deleteElement = document.createElement("button")
-    this.deleteElement.textContent = "Delete"
+
+    this.book_card_container.innerHTML = `
+     <h3 class="book-title">${book.getTitle()}</h3>
+        <p class="book-author">${book.getAuthor()}</p>
+        <p class="book-date">${book.getDate()}</p>
+        <div class="card-actions">
+            <label for="read_status">Letto?</label>
+            <input id="read_status" name="read_status" type="checkbox" class="book-read" ${book.getReadStatus() ? 'checked' : ''}>
+                
+            <button class="book-delete">Cancella</button>
+        </div> 
+    `
+
+    this.deleteElement = this.book_card_container.querySelector(".book-delete")
+    this.readElement = this.book_card_container.querySelector(".book-read")
+
+
     this.deleteElement.addEventListener("click", (event) => this.onDelete())
-    this.readElement.addEventListener("change", (event) => {
-
-        this.onRead()
-    })
-
-    //classes for style
-    this.authorElement.classList.add("book-author")
-    this.dateElement.classList.add("book-date")
-
-    //
-
-    this.book_card_container.appendChild(this.titleElement)
-    this.book_card_container.appendChild(this.authorElement)
-    this.book_card_container.appendChild(this.dateElement)
-    this.book_card_container.appendChild(this.readElement)
-    this.book_card_container.appendChild(this.deleteElement)
+    this.readElement.addEventListener("change", (event) => this.onRead())
 
 
 
-    this.setTitle = function (title) {
-        this.titleElement.textContent = title
-        return this
-    }
-    this.setReadStatus = function (readStatus) {
-        this.readElement.checked = readStatus
-        return this
-    }
-    this.setAuthor = function (author) {
-        this.authorElement.textContent = author
-        return this
-    }
-    this.setDate = function (date) {
-        this.dateElement.textContent = date
-        return this
-    }
+
+    // this.setTitle = function (title) {
+    //     this.titleElement.textContent = title
+    //     return this
+    // }
+    // this.setReadStatus = function (readStatus) {
+    //     this.readElement.checked = readStatus
+    //     return this
+    // }
+    // this.setAuthor = function (author) {
+    //     this.authorElement.textContent = author
+    //     return this
+    // }
+    // this.setDate = function (date) {
+    //     this.dateElement.textContent = date
+    //     return this
+    // }
 
     this.onRead = function () {
         const bookId = this.book.getId()
@@ -195,12 +204,6 @@ function BookCard(book) {
         }
     }
     this.render = function () {
-        book_qualities = book.getQualities()
-        this
-            .setTitle(book_qualities["name"])
-            .setReadStatus(book_qualities["isRead"])
-            .setAuthor(book_qualities["author"])
-            .setDate(book_qualities["year"])
         return this.book_card_container;
     }
 }
@@ -218,18 +221,18 @@ function displayBooks(last_only = true) {
         book_arr = library.getBooks()
 
     }
-    container = document.querySelector(".book_section")
+    let container = document.querySelector(".book_section")
 
 
     book_arr.forEach(book => {
-        displayBook(book);//reverse order
+        displayBook(container, book);//reverse order
 
 
     })
 }
 
-function displayBook(book) {
-    book_card = new BookCard(book);
+function displayBook(container, book) {
+    let book_card = new BookCard(book);
 
     container.prepend(book_card.render());
 }
