@@ -11,30 +11,28 @@
 <body>
     <header>
 
+        <h1>Benvenuto alla libreria</h1>
     </header>
 
-    <div>
 
-        <h1>Welcome to the library</h1>
-    </div>
 
-    <div class="add_section">
-        <label for="new_book">Add a book:</label>
-        <button type="button" popovertarget="book_dialog" name="new_book" id="new_book">New
-            book</button>
-        <dialog id="book_dialog" popover>
-            <legend>Add your new book:</legend>
+    <div class="add-section">
+        <label for="new_book">Aggiungi un libro:</label>
+        <button type="button" popovertarget="book-dialog" name="new-book" id="new-book">Nuovo
+            libro</button>
+        <dialog id="book-dialog" popover>
+            <legend>Aggiungi il tuo libro</legend>
             <form action="" method="POST">
-                <label for="name">Book name:</label>
+                <label for="name">Nome:</label>
                 <input type="text" name="name" id="name">
-                <label for="author">Author:</label>
+                <label for="author">Autore:</label>
                 <input type="text" name="author" id="author">
-                <label for="year">Year:</label>
+                <label for="year">Anno:</label>
                 <input type="date" name="year" id="year">
 
                 <div class="submit">
 
-                    <button type="submit" name="submit" id="submit">Submit</button>
+                    <button type="submit" name="submit" id="submit">Invio</button>
 
                     <button type="reset" name="reset" id="reset">Reset</button>
 
@@ -43,10 +41,8 @@
         </dialog>
     </div>
 
-    <div class="book_section">
-        <div class="card">
+    <div class="book-section">
 
-        </div>
 
     </div>
 

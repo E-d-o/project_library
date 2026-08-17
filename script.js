@@ -151,8 +151,10 @@ function BookCard(book) {
         <p class="book-author">${book.getAuthor()}</p>
         <p class="book-date">${book.getDate()}</p>
         <div class="card-actions">
+        <div class="read-actions">
             <label for="read_status">Letto?</label>
             <input id="read_status" name="read_status" type="checkbox" class="book-read" ${book.getReadStatus() ? 'checked' : ''}>
+        </div>
                 
             <button class="book-delete">Cancella</button>
         </div> 
@@ -221,7 +223,7 @@ function displayBooks(last_only = true) {
         book_arr = library.getBooks()
 
     }
-    let container = document.querySelector(".book_section")
+    let container = document.querySelector(".book-section")
 
 
     book_arr.forEach(book => {
@@ -241,7 +243,7 @@ function onSubmit(event) {
     event.preventDefault();
     console.log("Sumbitted!");
 
-    let field = document.querySelector("#book_dialog")
+    let field = document.querySelector("#book-dialog")
     let form = document.querySelector("form")
     let formData = new FormData(form)
     createNewBook(new BookQualities(formData.get("name"), formData.get("author"), formData.get("year")))
