@@ -5,17 +5,65 @@ body {
     padding: 1rem;
     margin: 2rem;
     background-color: #E7E2D3;
-    font-family: "Aleo";
+    font-family: "Aleo", "Times New Roman";
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
+form input {
+    border-radius: 4px;
+    padding: 0.25rem;
 
+}
+
+form>*:user-valid {
+
+    border: 2px solid green;
+}
+
+form>*:user-invalid {
+
+    border: 2px solid red;
+}
+
+form>*:user-valid+span::after {
+    content: " ✓";
+
+}
+
+form>*:user-invalid+span::after {
+    content: " ✖";
+
+}
+
+dialog {
+    padding: 2rem;
+
+}
+
+dialog>div.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.container>form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+}
+
+.submit {
+    grid-column: 2/3;
+    display: flex;
+    justify-content: end;
+}
 
 .book-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     padding: 1rem 0rem;
     gap: 2rem;
 }
@@ -30,9 +78,10 @@ body {
 
     transform: translate(0, 0);
 
-    transition: transform 0.4s ease-in-out;
+
     border: 1px solid var(--border-col);
     border-left: 12px solid var(--border-col);
+    transition: border 0.2s ease-in, transform 0.4s ease-in-out;
 
 }
 
@@ -47,7 +96,7 @@ body {
     --shadow-spread: 2px;
     box-shadow: 5px 5px var(--shadow-blur) var(--shadow-spread)rgb(115, 128, 141);
 
-    transform: translate(0px, -3px);
+    transform: translate(0px, -4px);
 
 
 
@@ -57,6 +106,30 @@ body {
     display: flex;
     justify-content: space-between;
 
+}
+
+.book-delete {
+
+    border: 2px solid var(--border-col);
+    transition: border 0.2s ease-in;
+
+}
+
+button {
+    border-radius: 4px;
+    padding: 4px 1rem;
+    font-family: "Aleo";
+    font-weight: 800;
+}
+
+button:hover {
+    background-color: lightgray;
+
+
+}
+
+#new-book {
+    border: 1px solid black;
 }
 
 .read-actions {

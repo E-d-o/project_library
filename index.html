@@ -18,26 +18,42 @@
 
     <div class="add-section">
         <label for="new_book">Aggiungi un libro:</label>
-        <button type="button" popovertarget="book-dialog" name="new-book" id="new-book">Nuovo
+        <button type="button" name="new-book" id="new-book">Nuovo
             libro</button>
         <dialog id="book-dialog" popover>
-            <legend>Aggiungi il tuo libro</legend>
-            <form action="" method="POST">
-                <label for="name">Nome:</label>
-                <input type="text" name="name" id="name">
-                <label for="author">Autore:</label>
-                <input type="text" name="author" id="author">
-                <label for="year">Anno:</label>
-                <input type="date" name="year" id="year">
+            <div class="container">
+                <legend>Aggiungi il tuo libro</legend>
+                <form action="" method="POST">
+                    <div>
+                        <label for="name">Nome:</label>
+                        <input type="text" name="name" id="name" required>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label for="author">Autore:</label>
+                        <input type="text" name="author" id="author">
+                        <span></span>
+                    </div>
+                    <div>
+                        <label for="year">Anno:</label>
+                        <input type="number" min="1900" name="year" id="year">
+                        <span></span>
+                    </div>
+                    <div>
+                        <label for="read">Letto?</label>
+                        <input type="checkbox" name="read" id="read">
+                        <span></span>
+                    </div>
 
-                <div class="submit">
+                    <div class="submit">
 
-                    <button type="submit" name="submit" id="submit">Invio</button>
+                        <button type="submit" name="submit-btn" id="submit-btn">Invio</button>
 
-                    <button type="reset" name="reset" id="reset">Reset</button>
+                        <button type="reset" name="reset-btn" id="reset-btn">Reset</button>
 
-                </div>
-            </form>
+                    </div>
+                </form>
+            </div>
         </dialog>
     </div>
 

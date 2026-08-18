@@ -1,6 +1,6 @@
 
 
-function BookQualities(name, author = "unknown author", year = new Date(), isRead = true) {
+function BookQualities(name, author = "autore sconosciuto", year = new Date().getFullYear(), isRead = true) {
 
     if (!new.target) {
         throw new TypeError("Calling Book without new is not permitted")
@@ -261,14 +261,41 @@ function onSubmit(event) {
     let field = document.querySelector("#book-dialog")
     let form = document.querySelector("form")
     let formData = new FormData(form)
-    createNewBook(new BookQualities(formData.get("name"), formData.get("author"), formData.get("year")))
+    const isRead = formData.has("read")
+    console.log("Isread ")
+    console.log(isRead)
+
+    createNewBook(new BookQualities(formData.get("name"), formData.get("author"), formData.get("year"), isRead))
     console.log(library.getLastBook().toString());
-    displayBooks()
+    displayBooks();
+    form.reset();
+    field.hidePopover();
+
 }
 
 form = document.querySelector("form")
+
 form.addEventListener("submit", onSubmit)
 
+function setMaxYear() {
+    yearInput = form.querySelector("input#year")
+    yearInput.max = new Date().getFullYear();
+}
+
+const button = document.getElementById('new-book');
+const dialog = document.getElementById('book-dialog');
+
+button.addEventListener('click', () => {
+    const rect = button.getBoundingClientRect();
 
 
+    dialog.style.position = 'fixed';
+    dialog.style.left = rect.left + 'px';
+    dialog.style.top = (rect.bottom + 8) + 'px';
+    dialog.style.margin = '0';
+
+
+    dialog.showPopover();
+});
+setMaxYear()
 displayBooks(last_only = false);
